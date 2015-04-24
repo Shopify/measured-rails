@@ -1,13 +1,4 @@
-require "measured/rails/version"
-require "measured"
+require "measured/rails/base"
 
-require "rails"
-
-module Measured
-  module Rails
-  end
-end
-
-if defined? Rails
-  require "measured/rails/railtie"
-end
+require "measured/rails/units/length"
+require "measured/rails/units/weight"

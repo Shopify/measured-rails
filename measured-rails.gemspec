@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Measured::Rails::VERSION
   spec.authors       = ["Kevin McPhillips"]
   spec.email         = ["github@kevinmcphillips.ca"]
-  spec.summary       = %q{ActiveRecord for measured}
-  spec.description   = %q{ActiveRecord adapter for assigning and managing measurements with their units provided by the measured gem.}
+  spec.summary       = %q{Rails adaptor for measured}
+  spec.description   = %q{Rails adapter for assigning and managing measurements with their units provided by the measured gem.}
   spec.homepage      = "https://github.com/Shopify/measured-rails"
   spec.license       = "MIT"
 
@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 5.5.1"
   spec.add_development_dependency "mocha", "~> 1.1.0"
   spec.add_development_dependency "pry"
+  spec.add_development_dependency "sqlite3"
 end

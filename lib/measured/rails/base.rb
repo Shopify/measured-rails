@@ -1,0 +1,17 @@
+require "measured/rails/version"
+require "measured"
+
+require "active_support"
+
+module Measured
+  module Rails
+    class Error < StandardError ; end
+  end
+end
+
+require "measured/rails/active_record"
+require "measured/rails/validations"
+
+if defined? Rails
+  require "measured/rails/railtie"
+end
