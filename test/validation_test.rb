@@ -5,19 +5,21 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     reset_db
   end
 
-  test "validation measurable: validation leaves a model valid" do
-    assert Thing.new.valid?
+  test "validation mock is valid" do
+    assert thing.valid?
+  end
+
+  test "validation measurable: validation leaves a model valid and deals with blank unit" do
+    assert ValidatedThing.new(length_presence: Measured::Length.new(4, :in)).valid?
   end
 
   test "validation true works by default" do
-    assert thing.valid?
     thing.length_unit = "junk"
     refute thing.valid?
     assert_equal ["Length is not a valid unit"], thing.errors.full_messages
   end
 
   test "validation can override the message" do
-    assert thing.valid?
     thing.length_message_unit = "junk"
     refute thing.valid?
     assert_equal ["Length message has a custom failure message"], thing.errors.full_messages
@@ -75,13 +77,79 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
   end
 
   test "validation presence works on measured columns" do
-    assert thing.valid?
     thing.length_presence = nil
     refute thing.valid?
     thing.length_presence_unit = "m"
     refute thing.valid?
     thing.length_presence_value = "3"
     assert thing.valid?
+  end
+
+  test "validation fails if only only the value is set" do
+    thing.length_unit = nil
+    refute thing.valid?
+  end
+
+  test "validation fails if only if the unit is set" do
+    thing.length_value = nil
+    refute thing.valid?
+  end
+
+  test "validation checks that numericality comparisons are against a Measurable subclass" do
+    thing.length_invalid_comparison = Measured::Length.new(30, :in)
+    assert_raises ArgumentError, ":not_a_measured_subclass must be a Measurable object" do
+      thing.valid?
+    end
+  end
+
+  test "validation for numericality uses a default invalid message" do
+    thing.length_numericality_inclusive = Measured::Length.new(30, :in)
+    refute thing.valid?
+    assert_equal ["Length numericality inclusive is not a valid unit"], thing.errors.full_messages
+
+    thing.length_numericality_inclusive = Measured::Length.new(1, :mm)
+    refute thing.valid?
+    assert_equal ["Length numericality inclusive is not a valid unit"], thing.errors.full_messages
+  end
+
+  test "validation for numericality uses the override message" do
+    thing.length_numericality_exclusive = Measured::Length.new(2, :m)
+    refute thing.valid?
+    assert_equal ["Length numericality exclusive is super not ok"], thing.errors.full_messages
+
+    thing.length_numericality_exclusive = Measured::Length.new(6000, :mm)
+    refute thing.valid?
+    assert_equal ["Length numericality exclusive is super not ok"], thing.errors.full_messages
+  end
+
+  test "validation for numericality checks :greater_than and :less_than and can use symbols as method names to look up values" do
+    thing.length_numericality_exclusive = Measured::Length.new(4, :m)
+    assert thing.valid?
+
+    thing.length_numericality_exclusive = Measured::Length.new(1, :m)
+    refute thing.valid?
+  end
+
+  test "validation for numericality checks :greater_than_or_equal_to and :less_than_or_equal_to" do
+    thing.length_numericality_inclusive = Measured::Length.new(10, :in)
+    assert thing.valid?
+
+    thing.length_numericality_exclusive = Measured::Length.new(3, :m)
+    refute thing.valid?
+  end
+
+  test "validation for numericality checks :equal_to and can use procs to look up values" do
+    thing.length_numericality_equality = Measured::Length.new(100, :cm)
+    assert thing.valid?
+
+    thing.length_numericality_equality = Measured::Length.new(1, :m)
+    assert thing.valid?
+
+    thing.length_numericality_equality = Measured::Length.new("99.9", :cm)
+    refute thing.valid?
+
+    thing.length_numericality_equality = Measured::Length.new(101, :cm)
+    refute thing.valid?
   end
 
   private
@@ -93,7 +161,10 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
       length_message: Measured::Length.new(3, :mm),
       length_units: Measured::Length.new(4, :m),
       length_units_singular: Measured::Length.new(5, :ft),
-      length_presence: Measured::Length.new(6, :m)
+      length_presence: Measured::Length.new(6, :m),
+      length_numericality_inclusive: Measured::Length.new(15, :in),
+      length_numericality_exclusive: Measured::Length.new(4, :m),
+      length_numericality_equality: Measured::Length.new(100, :cm),
     )
   end
 
