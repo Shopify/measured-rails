@@ -102,6 +102,18 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     end
   end
 
+  test "validation checks that numericality comparison against a scalar raise custom error" do
+    thing = ValidatedThing.new(length_non_zero_scalar: Measured::Length.new(4, :m))
+    assert_raises ArgumentError, ":4 is a scalar. Please validate against a Measurable object to add correct units" do
+      thing.valid?
+    end
+  end
+
+  test "validation checks that numericality comparison against a zero value scalar works" do
+    thing = ValidatedThing.new(length_zero_scalar: Measured::Length.new(0.01, :cm))
+    thing.valid?
+  end
+
   test "validation for numericality uses a default invalid message" do
     thing.length_numericality_inclusive = Measured::Length.new(30, :in)
     refute thing.valid?

@@ -30,6 +30,12 @@ class ValidatedThing < ActiveRecord::Base
   measured_length :length_invalid_comparison
   validates :length_invalid_comparison, measured: {equal_to: "not_a_measured_subclass"}
 
+  measured_length :length_non_zero_scalar
+  validates :length_non_zero_scalar, measured: {equal_to: 4}
+
+  measured_length :length_zero_scalar
+  validates :length_zero_scalar, measured: {greater_than: Measured::Length.new(0, :cm)}
+
   private
 
   def low_bound
