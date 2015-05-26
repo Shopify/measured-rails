@@ -87,8 +87,13 @@ Rather than `true` the validation can accept a hash with the following options:
 
 * `message`: Override the default "is invalid" message.
 * `units`: A subset of units available for this measurement. Units must be in existing measurement.
+* `greater_than`
+* `greater_than_or_equal_to`
+* `equal_to`
+* `less_than`
+* `less_than_or_equal_to`
 
-Validations can be combined with `presence` validator.
+Most of these options replace the `numericality` validator which compares the measurement/method name/proc to the column's value. Validations can also be combined with `presence` validator.
 
 **Note:** Validations are strongly recommended since assigning an invalid unit will cause the measurement to return `nil`, even if there is a value:
 

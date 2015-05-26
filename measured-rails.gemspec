@@ -19,9 +19,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "rails", ">= 4.0"
-  spec.add_runtime_dependency "measured", "0.0.4"
+  spec.add_runtime_dependency "measured", "0.0.6"
 
-  spec.add_development_dependency "bundler", "~> 1.8"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest", "~> 5.5.1"
   spec.add_development_dependency "mocha", "~> 1.1.0"

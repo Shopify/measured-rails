@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150419155505) do
+ActiveRecord::Schema.define(version: 20150512214352) do
 
   create_table "things", force: :cascade do |t|
     t.decimal  "length_value",                  precision: 10, scale: 2
@@ -29,22 +29,30 @@ ActiveRecord::Schema.define(version: 20150419155505) do
   end
 
   create_table "validated_things", force: :cascade do |t|
-    t.decimal  "length_value",                           precision: 10, scale: 2
-    t.string   "length_unit",                 limit: 12
-    t.decimal  "length_true_value",                      precision: 10, scale: 2
-    t.string   "length_true_unit",            limit: 12
-    t.decimal  "length_message_value",                   precision: 10, scale: 2
-    t.string   "length_message_unit",         limit: 12
-    t.decimal  "length_units_value",                     precision: 10, scale: 2
-    t.string   "length_units_unit",           limit: 12
-    t.decimal  "length_units_singular_value",            precision: 10, scale: 2
-    t.string   "length_units_singular_unit",  limit: 12
-    t.decimal  "length_presence_value",                  precision: 10, scale: 2
-    t.string   "length_presence_unit",        limit: 12
-    t.decimal  "length_invalid_value",                   precision: 10, scale: 2
-    t.string   "length_invalid_unit",         limit: 12
-    t.datetime "created_at",                                                      null: false
-    t.datetime "updated_at",                                                      null: false
+    t.decimal  "length_value",                                   precision: 10, scale: 2
+    t.string   "length_unit",                         limit: 12
+    t.decimal  "length_true_value",                              precision: 10, scale: 2
+    t.string   "length_true_unit",                    limit: 12
+    t.decimal  "length_message_value",                           precision: 10, scale: 2
+    t.string   "length_message_unit",                 limit: 12
+    t.decimal  "length_units_value",                             precision: 10, scale: 2
+    t.string   "length_units_unit",                   limit: 12
+    t.decimal  "length_units_singular_value",                    precision: 10, scale: 2
+    t.string   "length_units_singular_unit",          limit: 12
+    t.decimal  "length_presence_value",                          precision: 10, scale: 2
+    t.string   "length_presence_unit",                limit: 12
+    t.decimal  "length_invalid_value",                           precision: 10, scale: 2
+    t.string   "length_invalid_unit",                 limit: 12
+    t.datetime "created_at",                                                              null: false
+    t.datetime "updated_at",                                                              null: false
+    t.decimal  "length_numericality_inclusive_value",            precision: 10, scale: 2
+    t.string   "length_numericality_inclusive_unit",  limit: 12
+    t.decimal  "length_numericality_exclusive_value",            precision: 10, scale: 2
+    t.string   "length_numericality_exclusive_unit",  limit: 12
+    t.decimal  "length_numericality_equality_value",             precision: 10, scale: 2
+    t.string   "length_numericality_equality_unit",   limit: 12
+    t.decimal  "length_invalid_comparison_value",                precision: 10, scale: 2
+    t.string   "length_invalid_comparison_unit",      limit: 12
   end
 
 end
