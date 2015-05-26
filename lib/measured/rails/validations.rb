@@ -46,8 +46,8 @@ class MeasuredValidator < ActiveModel::EachValidator
       key
     end
 
-    if value.is_a?(Fixnum)
-      raise ArgumentError, ":#{ value } is a scalar. Please validate against a Measurable object to add correct units" unless value == 0
+    if value.is_a?(Numeric)
+      raise ArgumentError, ":#{ value } is a scalar. Please validate against a Measurable object with correct units" unless value == 0
       return value
     end
 

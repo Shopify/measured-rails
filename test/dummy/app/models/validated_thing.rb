@@ -34,7 +34,7 @@ class ValidatedThing < ActiveRecord::Base
   validates :length_non_zero_scalar, measured: {equal_to: 4}
 
   measured_length :length_zero_scalar
-  validates :length_zero_scalar, measured: {greater_than: Measured::Length.new(0, :cm)}
+  validates :length_zero_scalar, measured: {greater_than: 0}
 
   private
 

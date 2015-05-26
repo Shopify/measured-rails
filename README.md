@@ -93,6 +93,15 @@ Rather than `true` the validation can accept a hash with the following options:
 * `less_than`
 * `less_than_or_equal_to`
 
+**Special case** Comparison based validation against 0
+```ruby
+class Thing < ActiveRecord::Base
+  measured_length :non_negative_weight
+
+  validates :non_negative_weight, measured: {greater_than: 0}
+end
+```
+
 Most of these options replace the `numericality` validator which compares the measurement/method name/proc to the column's value. Validations can also be combined with `presence` validator.
 
 **Note:** Validations are strongly recommended since assigning an invalid unit will cause the measurement to return `nil`, even if there is a value:
@@ -123,3 +132,4 @@ $ bundle exec rake test
 ## Authors
 
 * [Kevin McPhillips](https://github.com/kmcphillips) at [Shopify](http://shopify.com/careers)
+* [Sai Warang](https://github.com/cyprusad) at [Shopify](http://shopify.com/careers)
