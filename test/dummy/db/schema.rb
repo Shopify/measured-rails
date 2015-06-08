@@ -53,6 +53,10 @@ ActiveRecord::Schema.define(version: 20150512214352) do
     t.string   "length_numericality_equality_unit",   limit: 12
     t.decimal  "length_invalid_comparison_value",                precision: 10, scale: 2
     t.string   "length_invalid_comparison_unit",      limit: 12
+    t.decimal  "length_non_zero_scalar_value",                   precision: 10, scale: 2
+    t.string   "length_non_zero_scalar_unit",         limit: 12
+    t.decimal  "length_zero_scalar_value",                       precision: 10, scale: 2
+    t.string   "length_zero_scalar_unit",             limit: 12
   end
 
 end
