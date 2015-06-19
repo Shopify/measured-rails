@@ -275,6 +275,17 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal Measured::Length.new(1.234, :mm), thing.height
   end
 
+  test "assigning the _value with a BigDecimal rounds to the column's precision" do
+    thing.height = Measured::Length.new(BigDecimal.new('123.456789123455678'), :mm)
+    assert_equal thing.height_value, BigDecimal.new('123.4567891235')
+  end
+
+  test "assigning the _value with a float uses 6 significant digits" do
+    thing.height = Measured::Length.new(1234.456789123455678, :mm)
+    assert_equal thing.height_value, BigDecimal.new('1234.46')
+  end
+
+
   private
 
   def length
