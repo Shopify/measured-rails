@@ -42,7 +42,13 @@ module Measured::Rails::ActiveRecord
           if incoming.is_a?(measured_class)
             instance_variable_set("@measured_#{ field }", incoming)
             value_field_name = "#{ field }_value"
-            public_send("#{ value_field_name }=", incoming.value.round(self.column_for_attribute(value_field_name).scale))
+            precision = self.column_for_attribute(value_field_name).precision
+            scale = self.column_for_attribute(value_field_name).scale
+            ## For BigDecimal#split syntax, refer http://ruby-doc.org/stdlib-2.1.1/libdoc/bigdecimal/rdoc/BigDecimal.html#method-i-split
+            if incoming.value.split[1].size > precision
+              raise Measured::Rails::Error, "The value #{incoming.value} being set for column '#{value_field_name}' has too many significant digits. Please ensure it has no more than #{precision} significant digits."
+            end
+            public_send("#{ value_field_name }=", incoming.value.round(scale))
             public_send("#{ field }_unit=", incoming.unit)
           else
             instance_variable_set("@measured_#{ field }", nil)
