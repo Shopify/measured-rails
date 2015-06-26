@@ -42,7 +42,7 @@ module Measured::Rails::ActiveRecord
           if incoming.is_a?(measured_class)
             instance_variable_set("@measured_#{ field }", incoming)
             value_field_name = "#{ field }_value"
-            public_send("#{ value_field_name }=", incoming.value.round(self.column_for_attribute(value_field_name).precision))
+            public_send("#{ value_field_name }=", incoming.value.round(self.column_for_attribute(value_field_name).scale))
             public_send("#{ field }_unit=", incoming.unit)
           else
             instance_variable_set("@measured_#{ field }", nil)
