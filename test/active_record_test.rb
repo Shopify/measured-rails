@@ -275,16 +275,21 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal Measured::Length.new(1.234, :mm), thing.height
   end
 
-  test "assigning the _value with a BigDecimal rounds to the column's precision" do
-    thing.height = Measured::Length.new(BigDecimal.new('123.456789123455678'), :mm)
-    assert_equal thing.height_value, BigDecimal.new('123.4567891235')
+  test "assigning the _value with a BigDecimal rounds to the column's rounding scale" do
+    thing.height = Measured::Length.new(BigDecimal.new('23.4567891'), :mm)
+    assert_equal thing.height_value, BigDecimal.new('23.46')
   end
 
-  test "assigning the _value with a float uses all the precision available" do
-    thing.height = Measured::Length.new(1234.456789123455678, :mm)
-    assert_equal thing.height_value, BigDecimal.new('1234.4567891235')
+  test "assigning the _value with a float uses all the rounding scale permissible" do
+    thing.height = Measured::Length.new(4.45678912, :mm)
+    assert_equal thing.height_value, BigDecimal.new('4.46')
   end
 
+  test "assigning a number with more significant digits than permitted by the column precision raises exception" do
+    assert_raises Measured::Rails::Error, "The value 4.45678912123123123 being set for column: 'height' has too many significant digits. Please ensure it has no more than 10 significant digits." do
+      thing.height = Measured::Length.new(4.45678912123123123, :mm)
+    end
+  end
 
   private
 
