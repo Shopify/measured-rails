@@ -285,9 +285,16 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal thing.height_value, BigDecimal.new('4.46')
   end
 
-  test "assigning a number with more significant digits than permitted by the column precision raises exception" do
-    assert_raises Measured::Rails::Error, "The value 4.45678912123123123 being set for column: 'height' has too many significant digits. Please ensure it has no more than 10 significant digits." do
+  test "assigning a number with more significant digits than permitted by the column precision does not raise exception when it can be rounded to have lesser significant digits per column's scale" do
+    assert_nothing_raised Measured::Rails::Error do
       thing.height = Measured::Length.new(4.45678912123123123, :mm)
+      assert_equal thing.height_value, BigDecimal.new('4.46')
+    end
+  end
+
+  test "assigning a number with more significant digits than permitted by the column precision raises exception" do
+    assert_raises Measured::Rails::Error, "The value 44567891212312312.3 being set for column: 'height' has too many significant digits. Please ensure it has no more than 10 significant digits." do
+      thing.height = Measured::Length.new(44567891212312312.3, :mm)
     end
   end
 
