@@ -79,6 +79,7 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
   test "validation presence works on measured columns" do
     thing.length_presence = nil
     refute thing.valid?
+    assert_equal ["Length presence can't be blank"], thing.errors.full_messages
     thing.length_presence_unit = "m"
     refute thing.valid?
     thing.length_presence_value = "3"
@@ -117,11 +118,11 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
   test "validation for numericality uses a default invalid message" do
     thing.length_numericality_inclusive = Measured::Length.new(30, :in)
     refute thing.valid?
-    assert_equal ["Length numericality inclusive is not a valid unit"], thing.errors.full_messages
+    assert_equal ["Length numericality inclusive 30 in must be <= 20 in"], thing.errors.full_messages
 
     thing.length_numericality_inclusive = Measured::Length.new(1, :mm)
     refute thing.valid?
-    assert_equal ["Length numericality inclusive is not a valid unit"], thing.errors.full_messages
+    assert_equal ["Length numericality inclusive 1 mm must be >= 10 in"], thing.errors.full_messages
   end
 
   test "validation for numericality uses the override message" do
