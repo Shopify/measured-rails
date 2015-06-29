@@ -1,4 +1,4 @@
-# Measured Rails [![Build Status](https://travis-ci.org/Shopify/measured-rails.svg)](https://travis-ci.org/Shopify/measured-rails)
+# Measured Rails [![Build Status](https://travis-ci.org/Shopify/measured-rails.svg)](https://travis-ci.org/Shopify/measured-rails) [![Gem Version](https://badge.fury.io/rb/measured-rails.svg)](http://badge.fury.io/rb/measured-rails)
 
 This gem is the Rails integration for the [measured](https://github.com/Shopify/measured) gem.
 
