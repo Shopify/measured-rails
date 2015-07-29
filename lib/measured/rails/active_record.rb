@@ -45,8 +45,8 @@ module Measured::Rails::ActiveRecord
             precision = self.column_for_attribute(value_field_name).precision
             scale = self.column_for_attribute(value_field_name).scale
             rounded_to_scale_value = incoming.value.round(scale)
-            ## For BigDecimal#split syntax, refer http://ruby-doc.org/stdlib-2.1.1/libdoc/bigdecimal/rdoc/BigDecimal.html#method-i-split
-            if rounded_to_scale_value.split[1].size > precision
+            
+            if rounded_to_scale_value.to_s.length > precision
               raise Measured::Rails::Error, "The value #{rounded_to_scale_value} being set for column '#{value_field_name}' has too many significant digits. Please ensure it has no more than #{precision} significant digits."
             end
             public_send("#{ value_field_name }=", rounded_to_scale_value)
