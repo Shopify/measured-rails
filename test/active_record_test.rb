@@ -304,6 +304,20 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     end
   end
 
+  test "assigning a large number that's just smaller, equal to, and over the size of the column precision raises exception" do
+    assert_nothing_raised Measured::Rails::Error do
+      thing.height = Measured::Length.new(99999999.99, :mm)
+    end
+
+    assert_raises Measured::Rails::Error, "The value 100000000.0 being set for column: 'height' has too many significant digits. Please ensure it has no more than 10 significant digits." do
+      thing.height = Measured::Length.new(100000000, :mm)
+    end
+
+    assert_raises Measured::Rails::Error, "The value 100000000.01 being set for column: 'height' has too many significant digits. Please ensure it has no more than 10 significant digits." do
+      thing.height = Measured::Length.new(100000000.01, :mm)
+    end
+  end
+
   private
 
   def length
