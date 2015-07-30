@@ -57,6 +57,8 @@ ActiveRecord::Schema.define(version: 20150512214352) do
     t.string   "length_non_zero_scalar_unit",         limit: 12
     t.decimal  "length_zero_scalar_value",                       precision: 10, scale: 2
     t.string   "length_zero_scalar_unit",             limit: 12
+    t.decimal  "length_numericality_less_than_than_scalar_value",                       precision: 10, scale: 2
+    t.string   "length_numericality_less_than_than_scalar_unit",             limit: 12
   end
 
 end

@@ -27,6 +27,7 @@ class MeasuredValidator < ActiveModel::EachValidator
 
     options.slice(*CHECKS.keys).each do |option, value|
       comparable_value = value_for(value, record)
+      comparable_value = measured_class.new(comparable_value, measurable_unit) if comparable_value.is_a?(Numeric)
       unless measurable.public_send(CHECKS[option], comparable_value)
         record.errors.add(attribute, message("#{measurable.to_s} must be #{CHECKS[option]} #{comparable_value}"))
       end
@@ -48,14 +49,8 @@ class MeasuredValidator < ActiveModel::EachValidator
     else
       key
     end
-
-    if value.is_a?(Numeric)
-      raise ArgumentError, ":#{ value } is a scalar. Please validate against a Measurable object with correct units" unless value == 0
-      return value
-    end
-
-    raise ArgumentError, ":#{ value } must be a Measurable object" unless value.is_a?(Measured::Measurable)
-
+    
+    raise ArgumentError, ":#{ value } must be a number or a Measurable object" unless (value.is_a?(Numeric) || value.is_a?(Measured::Measurable))
     value
   end
 end
