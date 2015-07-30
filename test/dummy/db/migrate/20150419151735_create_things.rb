@@ -16,6 +16,9 @@ class CreateThings < ActiveRecord::Migration
       t.decimal :extra_weight_value, precision: 10, scale: 2
       t.string :extra_weight_unit, limit: 12
 
+      t.decimal :length_with_max_on_assignment_value, precision: 10, scale: 2
+      t.string :length_with_max_on_assignment_unit, limit: 12
+
       t.timestamps null: false
     end
   end

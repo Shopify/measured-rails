@@ -8,4 +8,6 @@ class Thing < ActiveRecord::Base
 
   measured "Measured::Weight", :extra_weight
 
+  measured_length :length_with_max_on_assignment, {max_on_assignment: 500}
+
 end

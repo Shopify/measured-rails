@@ -46,8 +46,11 @@ module Measured::Rails::ActiveRecord
             scale = self.column_for_attribute(value_field_name).scale
             rounded_to_scale_value = incoming.value.round(scale)
             
-            if rounded_to_scale_value.to_i.to_s.length > (precision - scale)
-              raise Measured::Rails::Error, "The value #{rounded_to_scale_value} being set for column '#{value_field_name}' has too many significant digits. Please ensure it has no more than #{precision} significant digits."
+            max = self.class.measured_fields[field][:max_on_assignment]
+            if max && rounded_to_scale_value > max
+              rounded_to_scale_value = max  
+            elsif rounded_to_scale_value.to_i.to_s.length > (precision - scale)
+              raise Measured::Rails::Error, "The value #{rounded_to_scale_value} being set for column '#{value_field_name}' has too many significant digits. Please ensure it has no more than #{precision - scale} significant digits."
             end
             public_send("#{ value_field_name }=", rounded_to_scale_value)
             public_send("#{ field }_unit=", incoming.unit)
