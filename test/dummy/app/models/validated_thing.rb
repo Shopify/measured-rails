@@ -27,6 +27,9 @@ class ValidatedThing < ActiveRecord::Base
   measured_length :length_numericality_equality
   validates :length_numericality_equality, measured: {equal_to: Proc.new { Measured::Length.new(100, :cm) }, message: "must be exactly 100cm"}
 
+  measured_length :length_numericality_less_than_than_scalar
+  validates :length_numericality_less_than_than_scalar, measured: {less_than: 100}
+
   measured_length :length_invalid_comparison
   validates :length_invalid_comparison, measured: {equal_to: "not_a_measured_subclass"}
 
