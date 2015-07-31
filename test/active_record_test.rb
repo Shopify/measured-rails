@@ -37,7 +37,8 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
       width: { class: Measured::Length },
       height: { class: Measured::Length },
       total_weight: { class: Measured::Weight },
-      extra_weight: { class: Measured::Weight }
+      extra_weight: { class: Measured::Weight },
+      length_with_max_on_assignment: { max_on_assignment: 500, class: Measured::Length }
     }
 
     assert_equal expected, Thing.measured_fields
@@ -316,6 +317,16 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_raises Measured::Rails::Error, "The value 100000000.01 being set for column: 'height' has too many significant digits. Please ensure it has no more than 10 significant digits." do
       thing.height = Measured::Length.new(100000000.01, :mm)
     end
+  end
+
+  test "assigning a large number to a field that specifies max_on_assignment" do
+    thing = Thing.create!(length_with_max_on_assignment: Measured::Length.new(10000000000000000, :mm))
+    assert_equal Measured::Length.new(500, :mm), thing.length_with_max_on_assignment
+  end
+
+    test "assigning a small number to a field that specifies max_on_assignment" do
+    thing = Thing.create!(length_with_max_on_assignment: Measured::Length.new(1, :mm))
+    assert_equal Measured::Length.new(1, :mm), thing.length_with_max_on_assignment
   end
 
   private
