@@ -2,6 +2,8 @@ require "measured/rails/version"
 require "measured"
 
 require "active_support"
+require "active_model"
+require "active_model/validations"
 
 module Measured
   module Rails
