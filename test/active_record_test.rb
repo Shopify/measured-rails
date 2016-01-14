@@ -270,10 +270,10 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
   end
 
   test "update_attributes modifies both columns" do
-    thing.update_attributes(height_unit: "mm", height_value: 1.234)
-    assert_equal Measured::Length.new(1.234, :mm), thing.height
+    thing.update_attributes(height_unit: "mm", height_value: 1.23)
+    assert_equal Measured::Length.new(1.23, :mm), thing.height
     thing.reload
-    assert_equal Measured::Length.new(1.234, :mm), thing.height
+    assert_equal Measured::Length.new(1.23, :mm), thing.height
   end
 
   test "assigning the _value with a BigDecimal rounds to the column's rounding scale" do
