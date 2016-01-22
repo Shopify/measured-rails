@@ -103,6 +103,13 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal "invalid", thing.width_unit
   end
 
+  test "assigning an invalid _unit sets the column but the measurable object is nil and there is validation on the column" do
+    validated_thing.length_unit = "invalid"
+    validated_thing.valid?
+    assert_nil validated_thing.length
+    assert_equal "invalid", validated_thing.length_unit
+  end
+
   test "assigning a valid _unit sets it" do
     thing.width_unit = :mm
     assert_equal thing.width, Measured::Length.new(6, "mm")
@@ -148,6 +155,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
   end
 
   test "assigning the _unit to an invalid unit does not raise" do
+    thing.total_weight_value = 123
     thing.total_weight_unit = :invalid
     assert_nil thing.total_weight
   end
@@ -171,12 +179,19 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal Measured::Weight.new(100, :lb), thing.total_weight
   end
 
-  test "save does not succeed if you assign an invalid unit" do
+  test "save succeeds if you assign an invalid unit and there is no validation" do
     thing = Thing.new total_weight_value: "100", total_weight_unit: :invalid
     assert thing.save
     thing.reload
     assert_nil thing.total_weight
     assert_equal 100, thing.total_weight_value
+  end
+
+  test "save fails if you assign an invalid unit and there is validation" do
+    thing = validated_thing
+    thing.length_unit = "invalid"
+    refute thing.save
+    assert_nil thing.length
   end
 
   test "update_attribute sets only the _value column" do
@@ -235,13 +250,19 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal "in", thing.width_unit
   end
 
-  test "update_attributes sets the _unit column to nonsense" do
+  test "update_attributes sets the _unit column to something invalid" do
     thing = Thing.create!
     assert thing.update_attributes(width_unit: :invalid)
     assert_equal "invalid", thing.width_unit
     thing.reload
     assert_equal "invalid", thing.width_unit
     assert_nil thing.width
+  end
+
+  test "update_attributes does not set the _unit column to something invalid if there is validation" do
+    thing = validated_thing
+    thing.save!
+    refute thing.update_attributes(length_unit: :invalid)
   end
 
   test "update_attributes sets one column then the other" do
@@ -360,6 +381,20 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
       height: Measured::Length.new(1, :m),
       total_weight: Measured::Weight.new(200, :g),
       extra_weight: Measured::Weight.new(16, :oz)
+    )
+  end
+
+  def validated_thing
+    @thing ||= ValidatedThing.new(
+      length: Measured::Length.new(1, :m),
+      length_true: Measured::Length.new(2, :cm),
+      length_message: Measured::Length.new(3, :mm),
+      length_units: Measured::Length.new(4, :m),
+      length_units_singular: Measured::Length.new(5, :ft),
+      length_presence: Measured::Length.new(6, :m),
+      length_numericality_inclusive: Measured::Length.new(15, :in),
+      length_numericality_exclusive: Measured::Length.new(4, :m),
+      length_numericality_equality: Measured::Length.new(100, :cm),
     )
   end
 end
