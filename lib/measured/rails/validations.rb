@@ -25,11 +25,13 @@ class MeasuredValidator < ActiveModel::EachValidator
       record.errors.add(attribute, message("is not a valid unit")) unless valid_units.include?(measured_class.conversion.to_unit_name(measurable_unit))
     end
 
-    options.slice(*CHECKS.keys).each do |option, value|
-      comparable_value = value_for(value, record)
-      comparable_value = measured_class.new(comparable_value, measurable_unit) if comparable_value.is_a?(Numeric)
-      unless measurable.public_send(CHECKS[option], comparable_value)
-        record.errors.add(attribute, message("#{measurable.to_s} must be #{CHECKS[option]} #{comparable_value}"))
+    if measured_class.valid_unit?(measurable_unit)
+      options.slice(*CHECKS.keys).each do |option, value|
+        comparable_value = value_for(value, record)
+        comparable_value = measured_class.new(comparable_value, measurable_unit) if comparable_value.is_a?(Numeric)
+        unless measurable.public_send(CHECKS[option], comparable_value)
+          record.errors.add(attribute, message("#{measurable.to_s} must be #{CHECKS[option]} #{comparable_value}"))
+        end
       end
     end
   end
@@ -49,7 +51,7 @@ class MeasuredValidator < ActiveModel::EachValidator
     else
       key
     end
-    
+
     raise ArgumentError, ":#{ value } must be a number or a Measurable object" unless (value.is_a?(Numeric) || value.is_a?(Measured::Measurable))
     value
   end
