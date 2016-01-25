@@ -194,6 +194,13 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_nil thing.length
   end
 
+  test "save fails if you assign an invalid unit and there is validation on numericality" do
+    thing = validated_thing
+    thing.length_zero_scalar_unit = "invalid"
+    refute thing.save
+    assert_nil thing.length_zero_scalar
+  end
+
   test "update_attribute sets only the _value column" do
     thing = Thing.create!
     thing.update_attribute(:width_value, 11)
