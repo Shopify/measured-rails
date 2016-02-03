@@ -173,6 +173,18 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     refute thing.valid?
   end
 
+  test "validation for numericality handles a nil value but a valid unit" do
+    thing.length_numericality_exclusive_unit = :cm
+    thing.length_numericality_exclusive_value = nil
+    refute thing.valid?
+  end
+
+  test "validation for numericality handles a nil unit but a valid value" do
+    thing.length_numericality_exclusive_unit = nil
+    thing.length_numericality_exclusive_value = 1
+    refute thing.valid?
+  end
+
   private
 
   def thing

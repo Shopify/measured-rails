@@ -25,7 +25,7 @@ class MeasuredValidator < ActiveModel::EachValidator
       record.errors.add(attribute, message("is not a valid unit")) unless valid_units.include?(measured_class.conversion.to_unit_name(measurable_unit))
     end
 
-    if measured_class.valid_unit?(measurable_unit)
+    if measured_class.valid_unit?(measurable_unit) && measurable_value.present?
       options.slice(*CHECKS.keys).each do |option, value|
         comparable_value = value_for(value, record)
         comparable_value = measured_class.new(comparable_value, measurable_unit) if comparable_value.is_a?(Numeric)
