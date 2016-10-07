@@ -16,8 +16,6 @@ class MeasuredValidator < ActiveModel::EachValidator
 
     return unless measurable_unit.present? || measurable_value.present?
 
-    record.errors.add(attribute, message("cannot be blank")) if [measurable_unit.blank?, measurable_value.blank?].any?
-
     record.errors.add(attribute, message("is not a valid unit")) unless measured_class.valid_unit?(measurable_unit)
 
     if options[:units]
