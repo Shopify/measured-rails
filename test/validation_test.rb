@@ -91,11 +91,6 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     refute thing.valid?
   end
 
-  test "validation fails if only if the unit is set" do
-    thing.length_value = nil
-    refute thing.valid?
-  end
-
   test "validation checks that numericality comparisons are against a Measurable subclass" do
     thing.length_invalid_comparison = Measured::Length.new(30, :in)
     assert_raises ArgumentError, ":not_a_measured_subclass must be a Measurable object" do
@@ -173,17 +168,17 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     refute thing.valid?
   end
 
-  test "validation for numericality handles a nil value but a valid unit" do
-    thing.length_numericality_exclusive_unit = :cm
-    thing.length_numericality_exclusive_value = nil
-    refute thing.valid?
-  end
-
   test "validation for numericality handles a nil unit but a valid value" do
     thing.length_numericality_exclusive_unit = nil
     thing.length_numericality_exclusive_value = 1
     refute thing.valid?
   end
+
+  test "allow a nil value but a valid unit" do
+    thing.length_numericality_exclusive_unit = :cm
+    thing.length_numericality_exclusive_value = nil
+    assert thing.valid?
+   end
 
   private
 
