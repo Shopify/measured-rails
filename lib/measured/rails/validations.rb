@@ -9,10 +9,13 @@ class MeasuredValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, measurable)
     measured_config = record.class.measured_fields[attribute]
+    unit_field_name = measured_config[:unit_field_name] || "#{ attribute }_unit"
+    value_field_name = "#{ attribute }_value"
 
     measured_class = measured_config[:class]
-    measurable_unit = record.public_send("#{ attribute }_unit")
-    measurable_value = record.public_send("#{ attribute }_value")
+
+    measurable_unit = record.public_send(unit_field_name)
+    measurable_value = record.public_send(value_field_name)
 
     return unless measurable_unit.present? || measurable_value.present?
 

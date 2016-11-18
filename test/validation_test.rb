@@ -13,6 +13,25 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     assert ValidatedThing.new(length_presence: Measured::Length.new(4, :in)).valid?
   end
 
+  test "validation fails when unit is nil" do
+    thing.length_unit = ''
+    refute thing.valid?
+    assert_equal({ length: "is not a valid unit" }, thing.errors.to_h)
+  end
+
+  test "validation fails on model with custom unit with nil value" do
+    custom_unit_thing.size_unit = ''
+    refute custom_unit_thing.valid?
+    assert_equal(
+      {
+        length: "is not a valid unit",
+        width:  "is not a valid unit",
+        height: "is not a valid unit",
+      },
+      custom_unit_thing.errors.to_h
+    )
+  end
+
   test "validation true works by default" do
     thing.length_unit = "junk"
     refute thing.valid?
@@ -178,7 +197,19 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     thing.length_numericality_exclusive_unit = :cm
     thing.length_numericality_exclusive_value = nil
     assert thing.valid?
-   end
+  end
+
+  test "validations work as expected given a measured field with custom validators" do
+    assert custom_unit_thing.valid?
+
+    assert custom_unit_thing.size_unit = 'invalid'
+
+    refute custom_unit_thing.valid?
+
+    assert_equal(custom_unit_thing.errors[:length], ["is not a valid unit"])
+    assert_equal(custom_unit_thing.errors[:height], ["is not a valid unit"])
+    assert_equal(custom_unit_thing.errors[:width], ["is not a valid unit"])
+  end
 
   private
 
@@ -193,6 +224,16 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
       length_numericality_inclusive: Measured::Length.new(15, :in),
       length_numericality_exclusive: Measured::Length.new(4, :m),
       length_numericality_equality: Measured::Length.new(100, :cm),
+    )
+  end
+
+  def custom_unit_thing
+    @custom_unit_thing ||= ThingWithCustomUnitAccessor.new(
+      length: Measured::Length.new(1, :m),
+      width: Measured::Length.new(2, :m),
+      height: Measured::Length.new(3, :m),
+      total_weight: Measured::Weight.new(10, :g),
+      extra_weight: Measured::Weight.new(12, :g),
     )
   end
 
