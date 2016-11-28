@@ -380,14 +380,19 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
   end
 
   test "changing unit value when shared affects all fields" do
-    custom_unit_thing.length = Measured::Length.new(15, :in)
+    custom_unit_thing.width = Measured::Length.new(15, :in)
     custom_unit_thing.total_weight = Measured::Weight.new(42, :kg)
 
-    assert_equal custom_unit_thing.length, Measured::Length.new(15, :in)
-    assert_equal custom_unit_thing.width, Measured::Length.new(2, :in)
+    assert_equal custom_unit_thing.length, Measured::Length.new(1, :in)
+    assert_equal custom_unit_thing.width, Measured::Length.new(15, :in)
     assert_equal custom_unit_thing.height, Measured::Length.new(3, :in)
     assert_equal custom_unit_thing.total_weight, Measured::Weight.new(42, :kg)
     assert_equal custom_unit_thing.extra_weight, Measured::Weight.new(12, :kg)
+
+    custom_unit_thing.length = Measured::Length.new(15, :in)
+    assert_equal custom_unit_thing.length, Measured::Length.new(15, :in)
+    assert_equal custom_unit_thing.width, Measured::Length.new(15, :in)
+    assert_equal custom_unit_thing.height, Measured::Length.new(3, :in)
   end
 
   private
