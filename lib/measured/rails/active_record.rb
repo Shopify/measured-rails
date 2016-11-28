@@ -13,13 +13,15 @@ module Measured::Rails::ActiveRecord
 
       options[:class] = measured_class
 
+      custom_unit_field_name = options[:unit_field_name].to_s.presence
+
       fields.map(&:to_sym).each do |field|
         raise Measured::Rails::Error, "The field #{ field } has already been measured" if measured_fields.keys.include?(field)
 
         measured_fields[field] = options
 
-        if options[:unit_field_name]
-          unit_field_name = options[:unit_field_name].to_s
+        if custom_unit_field_name
+          unit_field_name = custom_unit_field_name
           measured_fields[field][:unit_field_name] = unit_field_name
         else
           unit_field_name = "#{ field }_unit"
