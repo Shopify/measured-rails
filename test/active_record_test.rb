@@ -366,9 +366,28 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal Measured::Length.new(500, :mm), thing.length_with_max_on_assignment
   end
 
-    test "assigning a small number to a field that specifies max_on_assignment" do
-    thing = Thing.create!(length_with_max_on_assignment: Measured::Length.new(1, :mm))
-    assert_equal Measured::Length.new(1, :mm), thing.length_with_max_on_assignment
+  test "assigning a small number to a field that specifies max_on_assignment" do
+     thing = Thing.create!(length_with_max_on_assignment: Measured::Length.new(1, :mm))
+     assert_equal Measured::Length.new(1, :mm), thing.length_with_max_on_assignment
+  end
+
+  test "using a similar unit accessor for multiple size fields" do
+    assert_equal Measured::Length.new(1, :m), custom_unit_thing.length
+    assert_equal Measured::Length.new(2, :m), custom_unit_thing.width
+    assert_equal Measured::Length.new(3, :m), custom_unit_thing.height
+    assert_equal Measured::Weight.new(10, :g), custom_unit_thing.total_weight
+    assert_equal Measured::Weight.new(12, :g), custom_unit_thing.extra_weight
+  end
+
+  test "changing unit value when shared affects all fields" do
+    custom_unit_thing.length = Measured::Length.new(15, :in)
+    custom_unit_thing.total_weight = Measured::Weight.new(42, :kg)
+
+    assert_equal custom_unit_thing.length, Measured::Length.new(15, :in)
+    assert_equal custom_unit_thing.width, Measured::Length.new(2, :in)
+    assert_equal custom_unit_thing.height, Measured::Length.new(3, :in)
+    assert_equal custom_unit_thing.total_weight, Measured::Weight.new(42, :kg)
+    assert_equal custom_unit_thing.extra_weight, Measured::Weight.new(12, :kg)
   end
 
   private
@@ -402,6 +421,16 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
       length_numericality_inclusive: Measured::Length.new(15, :in),
       length_numericality_exclusive: Measured::Length.new(4, :m),
       length_numericality_equality: Measured::Length.new(100, :cm),
+    )
+  end
+
+  def custom_unit_thing
+    @custom_unit_thing ||= ThingWithCustomUnitAccessor.new(
+      length: Measured::Length.new(1, :m),
+      width: Measured::Length.new(2, :m),
+      height: Measured::Length.new(3, :m),
+      total_weight: Measured::Weight.new(10, :g),
+      extra_weight: Measured::Weight.new(12, :g),
     )
   end
 end

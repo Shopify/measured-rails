@@ -20,7 +20,7 @@ Or stand alone:
 
 ### ActiveRecord
 
-Columns are expected to have the `_value` and `_unit` suffix, and be `DECIMAL` and `VARCHAR`, and defaults are accepted:
+Columns are expected to have the `_value` and `_unit` suffix, and be `DECIMAL` and `VARCHAR`, and defaults are accepted. Customizing the column used to hold units is supported, see below for details.
 
 ```ruby
 class AddWeightAndLengthToThings < ActiveRecord::Migration
@@ -40,6 +40,15 @@ A column can be declared as a measurement with its measurement subclass:
 class Thing < ActiveRecord::Base
   measured Measured::Weight, :minimum_weight
   measured Measured::Length, :total_length
+end
+```
+
+You can optionally customize the model's unit column by specifying it in the `unit_field_name` option, as follows:
+
+```ruby
+class ThingWithCustomUnitAccessor < ActiveRecord::Base
+  measured_length :length, :width, :height,     unit_field_name: :size_unit
+  measured_weight :total_weight, :extra_weight, unit_field_name: :weight_unit
 end
 ```
 

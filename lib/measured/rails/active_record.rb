@@ -5,6 +5,7 @@ module Measured::Rails::ActiveRecord
     def measured(measured_class, *fields)
       options = fields.extract_options!
       options = {}.merge(options)
+      defined_unit_accessors = []
 
       measured_class = measured_class.constantize if measured_class.is_a?(String)
 
@@ -14,12 +15,22 @@ module Measured::Rails::ActiveRecord
 
       fields.map(&:to_sym).each do |field|
         raise Measured::Rails::Error, "The field #{ field } has already been measured" if measured_fields.keys.include?(field)
+
         measured_fields[field] = options
+
+        if options[:unit_field_name]
+          unit_field_name = options[:unit_field_name].to_s
+          measured_fields[field][:unit_field_name] = unit_field_name
+        else
+          unit_field_name = "#{ field }_unit"
+        end
+
+        value_field_name = "#{ field }_value"
 
         # Reader to retrieve measured object
         define_method(field) do
-          value = public_send("#{ field }_value")
-          unit = public_send("#{ field }_unit")
+          value = public_send(value_field_name)
+          unit = public_send(unit_field_name)
 
           return nil unless value && unit
 
@@ -41,11 +52,10 @@ module Measured::Rails::ActiveRecord
         define_method("#{ field }=") do |incoming|
           if incoming.is_a?(measured_class)
             instance_variable_set("@measured_#{ field }", incoming)
-            value_field_name = "#{ field }_value"
             precision = self.column_for_attribute(value_field_name).precision
             scale = self.column_for_attribute(value_field_name).scale
             rounded_to_scale_value = incoming.value.round(scale)
-            
+
             max = self.class.measured_fields[field][:max_on_assignment]
             if max && rounded_to_scale_value > max
               rounded_to_scale_value = max  
@@ -53,20 +63,22 @@ module Measured::Rails::ActiveRecord
               raise Measured::Rails::Error, "The value #{rounded_to_scale_value} being set for column '#{value_field_name}' has too many significant digits. Please ensure it has no more than #{precision - scale} significant digits."
             end
             public_send("#{ value_field_name }=", rounded_to_scale_value)
-            public_send("#{ field }_unit=", incoming.unit)
+            public_send("#{ unit_field_name }=", incoming.unit)
           else
             instance_variable_set("@measured_#{ field }", nil)
-            public_send("#{ field }_value=", nil)
-            public_send("#{ field }_unit=", nil)
+            public_send("#{ value_field_name}=", nil)
+            public_send("#{ unit_field_name }=", nil)
           end
         end
 
-        # Writer to override unit assignment
-        define_method("#{ field }_unit=") do |incoming|
-          incoming = measured_class.conversion.to_unit_name(incoming) if measured_class.valid_unit?(incoming)
-          write_attribute("#{ field }_unit", incoming)
-        end
+        next if defined_unit_accessors.include?(unit_field_name)
 
+        # Writer to override unit assignment
+        define_method("#{ unit_field_name }=") do |incoming|
+          defined_unit_accessors << unit_field_name
+          incoming = measured_class.conversion.to_unit_name(incoming) if measured_class.valid_unit?(incoming)
+          write_attribute(unit_field_name, incoming)
+        end
       end
     end
 
