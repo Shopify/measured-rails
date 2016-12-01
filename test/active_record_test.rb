@@ -329,7 +329,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
   end
 
   test "assigning a number with more significant digits than permitted by the column precision does not raise exception when it can be rounded to have lesser significant digits per column's scale" do
-    assert_nothing_raised Measured::Rails::Error do
+    assert_nothing_raised do
       thing.height = Measured::Length.new(4.45678912123123123, :mm)
       assert_equal thing.height_value, BigDecimal.new('4.46')
     end
@@ -348,7 +348,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
   end
 
   test "assigning a large number that's just smaller, equal to, and over the size of the column precision raises exception" do
-    assert_nothing_raised Measured::Rails::Error do
+    assert_nothing_raised do
       thing.height = Measured::Length.new(99999999.99, :mm)
     end
 
