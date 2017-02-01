@@ -117,26 +117,6 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     end
   end
 
-  test "validation checks that numericality comparison against a zero scalar works" do
-    different_thing = ValidatedThing.new(length_presence: Measured::Length.new(4, :m), length_non_zero_scalar: Measured::Length.new(4, :m))
-    different_thing.valid?
-  end
-
-  test "validation checks that numericality comparison against a zero value scalar works" do
-    different_thing = ValidatedThing.new(length_presence: Measured::Length.new(4, :m), length_zero_scalar: Measured::Length.new(0.01, :cm))
-    assert different_thing.valid?
-  end
-
-  test "validation checks that numericality comparison against non-zero scalar works" do
-    different_thing = ValidatedThing.new(length_presence: Measured::Length.new(4, :m), length_numericality_less_than_than_scalar: Measured::Length.new(100, :m))
-    refute different_thing.valid?
-  end
-
-  test "validation checks that numericality comparison against a scalar works" do
-    different_thing = ValidatedThing.new(length_presence: Measured::Length.new(4, :m), length_numericality_less_than_than_scalar: Measured::Length.new(99, :m))
-    assert different_thing.valid?
-  end
-
   test "validation for numericality uses a default invalid message" do
     thing.length_numericality_inclusive = Measured::Length.new(30, :in)
     refute thing.valid?

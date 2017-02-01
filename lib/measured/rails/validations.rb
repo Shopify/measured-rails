@@ -14,22 +14,23 @@ class MeasuredValidator < ActiveModel::EachValidator
 
     measured_class = measured_config[:class]
 
-    measurable_unit = record.public_send(unit_field_name)
+    measurable_unit_name = record.public_send(unit_field_name)
     measurable_value = record.public_send(value_field_name)
 
-    return unless measurable_unit.present? || measurable_value.present?
+    return unless measurable_unit_name.present? || measurable_value.present?
 
-    record.errors.add(attribute, message("is not a valid unit")) unless measured_class.valid_unit?(measurable_unit)
+    measurable_unit = measured_class.unit_system.unit_for(measurable_unit_name)
+    record.errors.add(attribute, message("is not a valid unit")) unless measurable_unit
 
     if options[:units]
-      valid_units = [options[:units]].flatten.map{|u| measured_class.conversion.to_unit_name(u) }
-      record.errors.add(attribute, message("is not a valid unit")) unless valid_units.include?(measured_class.conversion.to_unit_name(measurable_unit))
+      valid_units = Array(options[:units]).map { |unit| measured_class.unit_system.unit_for(unit) }
+      record.errors.add(attribute, message("is not a valid unit")) unless valid_units.include?(measurable_unit)
     end
 
-    if measured_class.valid_unit?(measurable_unit) && measurable_value.present?
+    if measurable_unit && measurable_value.present?
       options.slice(*CHECKS.keys).each do |option, value|
         comparable_value = value_for(value, record)
-        comparable_value = measured_class.new(comparable_value, measurable_unit) if comparable_value.is_a?(Numeric)
+        comparable_value = measured_class.new(comparable_value, measurable_unit) unless comparable_value.is_a?(Measured::Measurable)
         unless measurable.public_send(CHECKS[option], comparable_value)
           record.errors.add(attribute, message("#{measurable.to_s} must be #{CHECKS[option]} #{comparable_value}"))
         end
