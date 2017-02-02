@@ -66,7 +66,7 @@ This will allow you to access and assign a measurement object:
 ```ruby
 thing = Thing.new
 thing.minimum_weight = Measured::Weight.new(10, "g")
-thing.minimum_weight_unit      # "g"
+thing.minimum_weight_unit     # "g"
 thing.minimum_weight_value    # 10
 ```
 
@@ -75,7 +75,7 @@ Order of assignment does not matter, and each property can be assigned separatel
 ```ruby
 params = { total_length_unit: "cm", total_length_value: "3" }
 thing = Thing.new(params)
-thing.total_length   # #<Measured::Length: 3 cm>
+thing.total_length.to_s   # 3 cm
 ```
 
 ### Validations
@@ -102,16 +102,7 @@ Rather than `true` the validation can accept a hash with the following options:
 * `less_than`
 * `less_than_or_equal_to`
 
-**Special case** Comparison based validation against 0
-```ruby
-class Thing < ActiveRecord::Base
-  measured_length :non_negative_weight
-
-  validates :non_negative_weight, measured: {greater_than: 0}
-end
-```
-
-Most of these options replace the `numericality` validator which compares the measurement/method name/proc to the column's value. Validations can also be combined with `presence` validator.
+All comparison validations require `Measured::Measurable` values, not scalars. Most of these options replace the `numericality` validator which compares the measurement/method name/proc to the column's value. Validations can also be combined with `presence` validator.
 
 **Note:** Validations are strongly recommended since assigning an invalid unit will cause the measurement to return `nil`, even if there is a value:
 
@@ -120,9 +111,7 @@ thing = Thing.new
 thing.total_length_value = 1
 thing.total_length_unit = "invalid"
 thing.total_length  # nil
-
 ```
-
 
 ## Tests
 
