@@ -95,6 +95,13 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     assert_equal ["Length units singular custom message too"], thing.errors.full_messages
   end
 
+  test "validation for unit reasons adds one message if unit is not supported by default and is not custom supported" do
+    thing.length_units_singular_unit = :t
+    refute thing.valid?
+
+    assert_equal ["Length units singular custom message too"], thing.errors.full_messages
+  end
+
   test "validation presence works on measured columns" do
     thing.length_presence = nil
     refute thing.valid?

@@ -22,7 +22,7 @@ class MeasuredValidator < ActiveModel::EachValidator
     measurable_unit = measured_class.unit_system.unit_for(measurable_unit_name)
     record.errors.add(attribute, message("is not a valid unit")) unless measurable_unit
 
-    if options[:units]
+    if options[:units] && measurable_unit.present?
       valid_units = Array(options[:units]).map { |unit| measured_class.unit_system.unit_for(unit) }
       record.errors.add(attribute, message("is not a valid unit")) unless valid_units.include?(measurable_unit)
     end
