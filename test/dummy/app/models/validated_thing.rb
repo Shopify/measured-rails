@@ -9,6 +9,9 @@ class ValidatedThing < ActiveRecord::Base
   measured_length :length_message
   validates :length_message, measured: {message: "has a custom failure message"}
 
+  measured_length :length_message_from_block
+  validates :length_message_from_block, measured: { message: Proc.new { |record| "#{record.length_message_from_block_unit} is not a valid unit" } }
+
   measured_length :length_units
   validates :length_units, measured: {units: [:meter, "cm"]}
 

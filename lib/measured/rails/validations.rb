@@ -20,11 +20,11 @@ class MeasuredValidator < ActiveModel::EachValidator
     return unless measurable_unit_name.present? || measurable_value.present?
 
     measurable_unit = measured_class.unit_system.unit_for(measurable_unit_name)
-    record.errors.add(attribute, message("is not a valid unit")) unless measurable_unit
+    record.errors.add(attribute, message(record, "is not a valid unit")) unless measurable_unit
 
     if options[:units]
       valid_units = Array(options[:units]).map { |unit| measured_class.unit_system.unit_for(unit) }
-      record.errors.add(attribute, message("is not a valid unit")) unless valid_units.include?(measurable_unit)
+      record.errors.add(attribute, message(record, "is not a valid unit")) unless valid_units.include?(measurable_unit)
     end
 
     if measurable_unit && measurable_value.present?
@@ -32,7 +32,7 @@ class MeasuredValidator < ActiveModel::EachValidator
         comparable_value = value_for(value, record)
         comparable_value = measured_class.new(comparable_value, measurable_unit) unless comparable_value.is_a?(Measured::Measurable)
         unless measurable.public_send(CHECKS[option], comparable_value)
-          record.errors.add(attribute, message("#{measurable.to_s} must be #{CHECKS[option]} #{comparable_value}"))
+          record.errors.add(attribute, message(record, "#{measurable.to_s} must be #{CHECKS[option]} #{comparable_value}"))
         end
       end
     end
@@ -40,8 +40,12 @@ class MeasuredValidator < ActiveModel::EachValidator
 
   private
 
-  def message(default_message)
-    options[:message] || default_message
+  def message(record, default_message)
+    if options[:message].respond_to?(:call)
+      options[:message].call(record)
+    else
+      options[:message] || default_message
+    end
   end
 
   def value_for(key, record)

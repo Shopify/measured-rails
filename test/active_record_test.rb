@@ -408,6 +408,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
       length: Measured::Length.new(1, :m),
       length_true: Measured::Length.new(2, :cm),
       length_message: Measured::Length.new(3, :mm),
+      length_message_from_block: Measured::Length.new(7, :mm),
       length_units: Measured::Length.new(4, :m),
       length_units_singular: Measured::Length.new(5, :ft),
       length_presence: Measured::Length.new(6, :m),
