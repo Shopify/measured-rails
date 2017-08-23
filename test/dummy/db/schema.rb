@@ -48,6 +48,8 @@ ActiveRecord::Schema.define(version: 20161118203701) do
     t.string   "length_true_unit",                                limit: 12
     t.decimal  "length_message_value",                                       precision: 10, scale: 2
     t.string   "length_message_unit",                             limit: 12
+    t.decimal  "length_message_from_block_value",                            precision: 10, scale: 2
+    t.string   "length_message_from_block_unit",                  limit: 12
     t.decimal  "length_units_value",                                         precision: 10, scale: 2
     t.string   "length_units_unit",                               limit: 12
     t.decimal  "length_units_singular_value",                                precision: 10, scale: 2

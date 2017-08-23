@@ -38,10 +38,16 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     assert_equal ["Length is not a valid unit"], thing.errors.full_messages
   end
 
-  test "validation can override the message" do
+  test "validation can override the message with a static string" do
     thing.length_message_unit = "junk"
     refute thing.valid?
     assert_equal ["Length message has a custom failure message"], thing.errors.full_messages
+  end
+
+  test "validation can override the message with a block" do
+    thing.length_message_from_block_unit = "junk"
+    refute thing.valid?
+    assert_equal ["Length message from block junk is not a valid unit"], thing.errors.full_messages
   end
 
   test "validation may be any valid unit" do
@@ -198,6 +204,7 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
       length: Measured::Length.new(1, :m),
       length_true: Measured::Length.new(2, :cm),
       length_message: Measured::Length.new(3, :mm),
+      length_message_from_block: Measured::Length.new(7, :mm),
       length_units: Measured::Length.new(4, :m),
       length_units_singular: Measured::Length.new(5, :ft),
       length_presence: Measured::Length.new(6, :m),
