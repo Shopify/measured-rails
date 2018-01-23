@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "measured-rails"
   spec.version       = Measured::Rails::VERSION
   spec.authors       = ["Kevin McPhillips"]
-  spec.email         = ["github@kevinmcphillips.ca"]
+  spec.email         = ["gems@shopify.com"]
   spec.summary       = %q{Rails adaptor for measured}
   spec.description   = %q{Rails adapter for assigning and managing measurements with their units provided by the measured gem.}
   spec.homepage      = "https://github.com/Shopify/measured-rails"
