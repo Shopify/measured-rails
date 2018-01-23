@@ -4,7 +4,7 @@ require "measured-rails"
 require "minitest/autorun"
 require "minitest/reporters"
 require "mocha/setup"
-require "pry"
+require "pry" unless ENV["CI"]
 
 require File.expand_path("../dummy/config/environment", __FILE__)
 
