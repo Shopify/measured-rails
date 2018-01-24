@@ -6,11 +6,14 @@ rvm:
   - 2.2.4
   - 2.3.1
   - 2.4.0
+  - 2.5.0
 gemfile:
   - Gemfile
   - gemfiles/rails-4.2.gemfile
   - gemfiles/rails-5.0.gemfile
   - gemfiles/rails-master.gemfile
+before_script:
+  - gem update --system
 matrix:
   exclude:
     - gemfile: Gemfile
