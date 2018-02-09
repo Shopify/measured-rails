@@ -24,6 +24,15 @@ ActiveRecord::Schema.define(version: 20161118203701) do
     t.datetime "updated_at",                                                              null: false
   end
 
+  create_table "thing_with_custom_value_accessors", force: :cascade do |t|
+    t.string "length_unit", limit: 12
+    t.decimal "length_value_number", precision: 10, scale: 2
+    t.string "extra_weight_unit", limit: 12
+    t.decimal "extra_number_value", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "things", force: :cascade do |t|
     t.decimal  "length_value",                                   precision: 10, scale: 2
     t.string   "length_unit",                         limit: 12

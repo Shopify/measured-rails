@@ -383,6 +383,19 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal custom_unit_thing.extra_weight, Measured::Weight.new(12, :kg)
   end
 
+  test "custom value accessor looks at the correct column" do
+    assert_equal 2, custom_value_thing.length_value_number
+    assert_equal 3, custom_value_thing.extra_number_value
+  end
+
+  test "custom value accessor assigns the correct column" do
+    custom_value_thing.length_value_number = 5
+    custom_value_thing.extra_number_value = 10
+
+    assert_equal Measured::Length.new(5, :m), custom_value_thing.length
+    assert_equal Measured::Weight.new(10, :kg), custom_value_thing.extra_weight
+  end
+
   private
 
   def length
@@ -425,6 +438,13 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
       height: Measured::Length.new(3, :m),
       total_weight: Measured::Weight.new(10, :g),
       extra_weight: Measured::Weight.new(12, :g),
+    )
+  end
+
+  def custom_value_thing
+    @custom_value_thing ||= ThingWithCustomValueAccessor.new(
+      length: Measured::Length.new(2, :m),
+      extra_weight: Measured::Weight.new(3, :kg),
     )
   end
 end

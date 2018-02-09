@@ -24,7 +24,11 @@ module Measured::Rails::ActiveRecord
           "#{ field }_unit"
         end
 
-        value_field_name = "#{ field }_value"
+        value_field_name = if options[:value_field_name]
+          measured_fields[field][:value_field_name] = options[:value_field_name].to_s
+        else
+          "#{ field }_value"
+        end
 
         # Reader to retrieve measured object
         unless method_defined?(field)
@@ -80,6 +84,13 @@ module Measured::Rails::ActiveRecord
           define_method("#{ unit_field_name }=") do |incoming|
             unit_name = measured_class.unit_system.unit_for(incoming).try!(:name)
             write_attribute(unit_field_name, unit_name || incoming)
+          end
+        end
+
+        # Writer to override value assignment
+        unless method_defined?("#{ value_field_name }=")
+          define_method("#{ value_field_name }=") do |incoming|
+            write_attribute(value_field_name, incoming)
           end
         end
       end
