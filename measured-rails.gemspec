@@ -29,5 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest-reporters"
   spec.add_development_dependency "mocha", "> 1.1.0"
   spec.add_development_dependency "pry"
+  spec.add_development_dependency "activerecord", ">= 4.2"
   spec.add_development_dependency "sqlite3"
 end

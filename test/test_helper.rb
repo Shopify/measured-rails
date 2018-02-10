@@ -1,8 +1,12 @@
 require "pry" unless ENV["CI"]
+require "active_support/all"
+require "active_record"
+require "active_model"
+
 require "measured"
 require "measured-rails"
-require "minitest/autorun"
 require "minitest/reporters"
+require "minitest/autorun"
 require "mocha/setup"
 
 ActiveSupport.test_order = :random
