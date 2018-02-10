@@ -1,12 +1,9 @@
 require "pry" unless ENV["CI"]
-require "rails/all"
 require "measured"
 require "measured-rails"
 require "minitest/autorun"
 require "minitest/reporters"
 require "mocha/setup"
-
-require File.expand_path("../dummy/config/environment", __FILE__)
 
 ActiveSupport.test_order = :random
 
@@ -27,5 +24,6 @@ class ActiveSupport::TestCase
   end
 end
 
+Dir.glob(File.expand_path("../support/models/*.rb", __FILE__)).each { |r| require r }
 ActiveRecord::Base.establish_connection adapter: "sqlite3", database: ":memory:"
-load File.dirname(__FILE__) + '/dummy/db/schema.rb'
+require_relative "support/schema.rb"
