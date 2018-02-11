@@ -34,7 +34,7 @@ module Measured::Rails::ActiveRecord
 
           return nil unless value && unit
 
-          instance = instance_variable_get("@measured_#{ field }")
+          instance = instance_variable_get("@measured_#{ field }") if instance_variable_defined?("@measured_#{ field }")
           new_instance = begin
             measured_class.new(value, unit)
           rescue Measured::UnitError
