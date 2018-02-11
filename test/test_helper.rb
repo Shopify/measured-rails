@@ -10,6 +10,13 @@ require File.expand_path("../dummy/config/environment", __FILE__)
 
 ActiveSupport.test_order = :random
 
+# Prevent two reporters from printing
+# https://github.com/kern/minitest-reporters/issues/230
+# https://github.com/rails/rails/issues/30491
+Minitest.load_plugins
+Minitest.extensions.delete('rails')
+Minitest.extensions.unshift('rails')
+
 Minitest::Reporters.use! [Minitest::Reporters::ProgressReporter.new(color: true)]
 
 class ActiveSupport::TestCase
