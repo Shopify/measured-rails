@@ -1,10 +1,10 @@
+require "pry" unless ENV["CI"]
 require "rails/all"
 require "measured"
 require "measured-rails"
 require "minitest/autorun"
 require "minitest/reporters"
 require "mocha/setup"
-require "pry" unless ENV["CI"]
 
 require File.expand_path("../dummy/config/environment", __FILE__)
 
