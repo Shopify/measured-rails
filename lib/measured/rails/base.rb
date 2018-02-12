@@ -1,7 +1,8 @@
 require "measured/rails/version"
 require "measured"
 
-require "active_support"
+require "active_support/all"
+require "active_record"
 require "active_model"
 require "active_model/validations"
 
