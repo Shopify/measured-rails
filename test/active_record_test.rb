@@ -383,6 +383,60 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal custom_unit_thing.extra_weight, Measured::Weight.new(12, :kg)
   end
 
+  test "single table inheritance supports units on the base class" do
+    Animal.create!(average_weight: weight)
+    assert_equal weight, Animal.first.average_weight
+  end
+
+  test "single table inheritance supports units on the subclass class" do
+    Bird.create!(average_weight: weight)
+    assert_equal weight, Bird.first.average_weight
+    assert_equal weight, Animal.first.average_weight
+  end
+
+  test "single table inheritance supports units on arbitrary subclass class depth" do
+    Kakapo.create!(average_weight: weight)
+    assert_equal weight, Bird.first.average_weight
+    assert_equal weight, Animal.first.average_weight
+    assert_equal weight, Kakapo.first.average_weight
+  end
+
+  test "single table inheritance supports assigning attributes separately" do
+    animal = Animal.new
+    animal.average_weight_unit = :g
+    animal.average_weight_value = 10_000
+    assert_equal Measured::Weight.new(10_000, :g), animal.average_weight
+  end
+
+  test "single table inheritance supports switching between classes" do
+    animal = Kakapo.new(average_weight: weight).becomes(Bird)
+    assert_equal weight, animal.average_weight
+
+    animal = Animal.new(average_weight_unit: :lb, average_weight_value: 2).becomes(Kakapo)
+    assert_equal Measured::Weight.new(2, :lb), animal.average_weight
+  end
+
+  test "single table inheritance allows validation on a subclass" do
+    refute_predicate Kakapo.new(average_weight_unit: "feathers", average_weight_value: 1000), :valid?
+    assert_predicate Bird.new(average_weight_unit: "feathers", average_weight_value: 1000), :valid?
+  end
+
+  test "single table inheritance supports putting the declaration somewhere in the tree" do
+    assert_raises NoMethodError do
+      Food.new.portion
+    end
+
+    Snack.create!(portion: weight)
+    assert_equal weight, Snack.first.portion
+
+    taco = Taco.new
+    taco.portion_unit = :oz
+    taco.portion_value = 3
+    assert_equal Measured::Weight.new(3, :oz), taco.portion
+    taco.save!
+    assert_equal Measured::Weight.new(3, :oz), Taco.first.portion
+  end
+
   private
 
   def length
@@ -391,6 +445,10 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
 
   def new_length
     @new_length ||= Measured::Length.new(20, :in)
+  end
+
+  def weight
+    @weight ||= Measured::Weight.new(12, :kg)
   end
 
   def thing

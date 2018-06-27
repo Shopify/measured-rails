@@ -76,4 +76,15 @@ ActiveRecord::Schema.define(version: 20161118203701) do
     t.string   "length_numericality_less_than_than_scalar_unit",  limit: 12
   end
 
+  create_table "animals", force: :cascade do |t|
+    t.string   "type"
+    t.decimal  "average_weight_value",                                   precision: 10, scale: 2
+    t.string   "average_weight_unit",                         limit: 12
+  end
+
+  create_table "foods", force: :cascade do |t|
+    t.string   "type"
+    t.decimal  "portion_value",                                   precision: 10, scale: 2
+    t.string   "portion_unit",                         limit: 12
+  end
 end
