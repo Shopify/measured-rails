@@ -84,7 +84,11 @@ module Measured::Rails::ActiveRecord
     end
 
     def measured_fields
-      @measured_fields ||= {}
+      if self == base_class
+        @measured_fields ||= {}
+      else
+        base_class.measured_fields
+      end
     end
 
   end

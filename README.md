@@ -78,6 +78,16 @@ thing = Thing.new(params)
 thing.total_length.to_s   # 3 cm
 ```
 
+Single table inheritance (STI) is supported by delegating configuration up to the base class:
+
+```ruby
+class SpecificThing < Thing
+end
+
+specific = Thing.new(total_length: Measured::Length.new(1, :m)).becomes(Specific)
+specific.total_length.to_s # 1 m
+```
+
 ### Validations
 
 Validations are available:
