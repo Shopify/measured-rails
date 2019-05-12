@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 20161118203701) do
     t.string   "width_unit",                          limit: 12
     t.decimal  "height_value",                                   precision: 10, scale: 2
     t.string   "height_unit",                         limit: 12
+    t.decimal  "volume_value",                                   precision: 10, scale: 2
+    t.string   "volume_unit",                         limit: 12
     t.decimal  "total_weight_value",                             precision: 10, scale: 2, default: "10.0"
     t.string   "total_weight_unit",                   limit: 12,                          default: "g"
     t.decimal  "extra_weight_value",                             precision: 10, scale: 2

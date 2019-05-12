@@ -36,6 +36,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
       length: { class: Measured::Length },
       width: { class: Measured::Length },
       height: { class: Measured::Length },
+      volume: { class: Measured::Volume },
       total_weight: { class: Measured::Weight },
       extra_weight: { class: Measured::Weight },
       length_with_max_on_assignment: { max_on_assignment: 500, class: Measured::Length }
@@ -397,6 +398,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     @thing ||= Thing.create!(
       length: length,
       width: Measured::Length.new(6, :in),
+      volume: Measured::Volume.new(6, :l),
       height: Measured::Length.new(1, :m),
       total_weight: Measured::Weight.new(200, :g),
       extra_weight: Measured::Weight.new(16, :oz)

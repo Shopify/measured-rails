@@ -40,6 +40,7 @@ A column can be declared as a measurement with its measurement subclass:
 class Thing < ActiveRecord::Base
   measured Measured::Weight, :minimum_weight
   measured Measured::Length, :total_length
+  measured Measured::Volume, :total_volume
 end
 ```
 
@@ -49,6 +50,7 @@ You can optionally customize the model's unit column by specifying it in the `un
 class ThingWithCustomUnitAccessor < ActiveRecord::Base
   measured_length :length, :width, :height,     unit_field_name: :size_unit
   measured_weight :total_weight, :extra_weight, unit_field_name: :weight_unit
+  measured_volume :total_volume, :extra_volume, unit_field_name: :volume_unit
 end
 ```
 
@@ -58,6 +60,7 @@ There are some simpler methods for predefined types:
 class Thing < ActiveRecord::Base
   measured_weight :minimum_weight
   measured_length :total_length
+  measured_volume :total_volume
 end
 ```
 

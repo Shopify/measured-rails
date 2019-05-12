@@ -3,6 +3,7 @@ class Thing < ActiveRecord::Base
   measured_length :length, :width
 
   measured Measured::Length, :height
+  measured Measured::Volume, :volume
 
   measured_weight :total_weight
 
