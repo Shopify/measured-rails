@@ -4,6 +4,9 @@ class ThingWithCustomUnitAccessor < ActiveRecord::Base
   validates :length, measured: true
   validates :width, measured: true
 
+  measured_volume :volume
+  validates :volume, measured: true
+
   measured Measured::Length, :height, unit_field_name: :size_unit
   validates :height, measured: true
 

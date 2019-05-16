@@ -369,6 +369,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal Measured::Length.new(1, :m), custom_unit_thing.length
     assert_equal Measured::Length.new(2, :m), custom_unit_thing.width
     assert_equal Measured::Length.new(3, :m), custom_unit_thing.height
+    assert_equal Measured::Volume.new(9, :l), custom_unit_thing.volume
     assert_equal Measured::Weight.new(10, :g), custom_unit_thing.total_weight
     assert_equal Measured::Weight.new(12, :g), custom_unit_thing.extra_weight
   end
@@ -425,6 +426,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
       length: Measured::Length.new(1, :m),
       width: Measured::Length.new(2, :m),
       height: Measured::Length.new(3, :m),
+      volume: Measured::Volume.new(9, :l),
       total_weight: Measured::Weight.new(10, :g),
       extra_weight: Measured::Weight.new(12, :g),
     )
