@@ -36,6 +36,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
       length: { class: Measured::Length },
       width: { class: Measured::Length },
       height: { class: Measured::Length },
+      volume: { class: Measured::Volume },
       total_weight: { class: Measured::Weight },
       extra_weight: { class: Measured::Weight },
       length_with_max_on_assignment: { max_on_assignment: 500, class: Measured::Length }
@@ -368,6 +369,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal Measured::Length.new(1, :m), custom_unit_thing.length
     assert_equal Measured::Length.new(2, :m), custom_unit_thing.width
     assert_equal Measured::Length.new(3, :m), custom_unit_thing.height
+    assert_equal Measured::Volume.new(9, :l), custom_unit_thing.volume
     assert_equal Measured::Weight.new(10, :g), custom_unit_thing.total_weight
     assert_equal Measured::Weight.new(12, :g), custom_unit_thing.extra_weight
   end
@@ -397,6 +399,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     @thing ||= Thing.create!(
       length: length,
       width: Measured::Length.new(6, :in),
+      volume: Measured::Volume.new(6, :l),
       height: Measured::Length.new(1, :m),
       total_weight: Measured::Weight.new(200, :g),
       extra_weight: Measured::Weight.new(16, :oz)
@@ -423,6 +426,7 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
       length: Measured::Length.new(1, :m),
       width: Measured::Length.new(2, :m),
       height: Measured::Length.new(3, :m),
+      volume: Measured::Volume.new(9, :l),
       total_weight: Measured::Weight.new(10, :g),
       extra_weight: Measured::Weight.new(12, :g),
     )
