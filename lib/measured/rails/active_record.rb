@@ -5,7 +5,6 @@ module Measured::Rails::ActiveRecord
     def measured(measured_class, *fields)
       options = fields.extract_options!
       options = {}.merge(options)
-      defined_unit_accessors = []
 
       measured_class = measured_class.constantize if measured_class.is_a?(String)
       unless measured_class.is_a?(Class) && measured_class.ancestors.include?(Measured::Measurable)
@@ -72,13 +71,12 @@ module Measured::Rails::ActiveRecord
           end
         end
 
-        next if defined_unit_accessors.include?(unit_field_name)
-
         # Writer to override unit assignment
-        define_method("#{ unit_field_name }=") do |incoming|
-          defined_unit_accessors << unit_field_name
-          unit_name = measured_class.unit_system.unit_for(incoming).try!(:name)
-          write_attribute(unit_field_name, unit_name || incoming)
+        if !method_defined?("#{ unit_field_name }=")
+          define_method("#{ unit_field_name }=") do |incoming|
+            unit_name = measured_class.unit_system.unit_for(incoming).try!(:name)
+            write_attribute(unit_field_name, unit_name || incoming)
+          end
         end
       end
     end
