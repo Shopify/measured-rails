@@ -72,11 +72,9 @@ module Measured::Rails::ActiveRecord
         end
 
         # Writer to override unit assignment
-        if !method_defined?("#{ unit_field_name }=")
-          define_method("#{ unit_field_name }=") do |incoming|
-            unit_name = measured_class.unit_system.unit_for(incoming).try!(:name)
-            write_attribute(unit_field_name, unit_name || incoming)
-          end
+        redefine_method("#{ unit_field_name }=") do |incoming|
+          unit_name = measured_class.unit_system.unit_for(incoming).try!(:name)
+          write_attribute(unit_field_name, unit_name || incoming)
         end
       end
     end
