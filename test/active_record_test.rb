@@ -313,19 +313,19 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
   end
 
   test "assigning the _value with a BigDecimal rounds to the column's rounding scale" do
-    thing.height = Measured::Length.new(BigDecimal.new('23.4567891'), :mm)
-    assert_equal thing.height_value, BigDecimal.new('23.46')
+    thing.height = Measured::Length.new(BigDecimal('23.4567891'), :mm)
+    assert_equal thing.height_value, BigDecimal('23.46')
   end
 
   test "assigning the _value with a float uses all the rounding scale permissible" do
     thing.height = Measured::Length.new(4.45678912, :mm)
-    assert_equal thing.height_value, BigDecimal.new('4.46')
+    assert_equal thing.height_value, BigDecimal('4.46')
   end
 
   test "assigning a number with more significant digits than permitted by the column precision does not raise exception when it can be rounded to have lesser significant digits per column's scale" do
     assert_nothing_raised do
       thing.height = Measured::Length.new(4.45678912123123123, :mm)
-      assert_equal thing.height_value, BigDecimal.new('4.46')
+      assert_equal thing.height_value, BigDecimal('4.46')
     end
   end
 
