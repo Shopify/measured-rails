@@ -1,5 +1,5 @@
+# frozen_string_literal: true
 class ValidatedThing < ActiveRecord::Base
-
   measured_length :length
   validates :length, measured: true
 
@@ -42,5 +42,4 @@ class ValidatedThing < ActiveRecord::Base
   def high_bound
     Measured::Length.new(20, :in)
   end
-
 end

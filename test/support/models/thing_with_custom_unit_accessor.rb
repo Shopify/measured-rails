@@ -1,5 +1,5 @@
+# frozen_string_literal: true
 class ThingWithCustomUnitAccessor < ActiveRecord::Base
-
   measured_length :length, :width, unit_field_name: :size_unit
   validates :length, measured: true
   validates :width, measured: true

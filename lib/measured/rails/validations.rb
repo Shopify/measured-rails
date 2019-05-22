@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class MeasuredValidator < ActiveModel::EachValidator
   CHECKS = {
     greater_than: :>,
