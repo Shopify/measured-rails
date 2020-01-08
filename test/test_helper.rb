@@ -4,7 +4,7 @@ require "measured"
 require "measured-rails"
 require "minitest/autorun"
 require "minitest/reporters"
-require "mocha/setup"
+require "mocha/minitest"
 
 ActiveSupport.test_order = :random
 
