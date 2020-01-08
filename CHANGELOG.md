@@ -1,3 +1,8 @@
+2.5.2
+-----
+
+* Fix some deprecations in tests and CI.
+
 2.5.1
 -----
 
