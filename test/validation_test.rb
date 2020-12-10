@@ -17,7 +17,7 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
   test "validation fails when unit is nil" do
     thing.length_unit = ''
     refute thing.valid?
-    assert_equal({ length: "is not a valid unit" }, thing.errors.to_h)
+    assert_equal({ length: ["is not a valid unit"] }, thing.errors.to_hash)
   end
 
   test "validation fails on model with custom unit with nil value" do
@@ -25,11 +25,11 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     refute custom_unit_thing.valid?
     assert_equal(
       {
-        length: "is not a valid unit",
-        width:  "is not a valid unit",
-        height: "is not a valid unit",
+        length: ["is not a valid unit"],
+        width:  ["is not a valid unit"],
+        height: ["is not a valid unit"],
       },
-      custom_unit_thing.errors.to_h
+      custom_unit_thing.errors.to_hash
     )
   end
 
