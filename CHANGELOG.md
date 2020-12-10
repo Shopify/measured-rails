@@ -1,3 +1,9 @@
+2.6.0
+-----
+
+* Only support Rails 5.2 and above.
+
+
 2.5.2
 -----
 
