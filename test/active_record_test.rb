@@ -196,109 +196,87 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_nil thing.length
   end
 
-  test "update_attribute sets only the _value column" do
+  test "update sets one then the other" do
     thing = Thing.create!
-    thing.update_attribute(:width_value, 11)
+    assert thing.update(width_value: 11.1)
     assert_nil thing.width
-  end
-
-  test "update_attribute sets only the _unit column" do
-    thing = Thing.create!
-    thing.update_attribute(:width_unit, "cm")
-    assert_nil thing.width
-  end
-
-  test "update_attribute modifies the _value column" do
-    assert thing.update_attribute(:width_value, 99)
-    assert_equal Measured::Length.new(99, :in), thing.width
-  end
-
-  test "update_attribute modifies only the _unit column" do
-    assert thing.update_attribute(:width_unit, :cm)
-    assert_equal Measured::Length.new(6, :cm), thing.width
-  end
-
-  test "update_attribute sets one then the other" do
-    thing = Thing.create!
-    assert thing.update_attribute(:width_value, 11.1)
-    assert_nil thing.width
-    assert thing.update_attribute(:width_unit, "cm")
+    assert thing.update(width_unit: "cm")
     assert_equal Measured::Length.new(11.1, :cm), thing.width
   end
 
-  test "update_attributes sets only the _value column" do
+  test "update sets only the _value column" do
     thing = Thing.create!
-    assert thing.update_attributes(width_value: "314")
+    assert thing.update(width_value: "314")
     assert_equal 314, thing.width_value
     thing.reload
     assert_equal 314, thing.width_value
     assert_nil thing.width
   end
 
-  test "update_attributes sets only the _unit column" do
+  test "update sets only the _unit column" do
     thing = Thing.create!
-    assert thing.update_attributes(width_unit: :cm)
+    assert thing.update(width_unit: :cm)
     assert_equal "cm", thing.width_unit
     thing.reload
     assert_equal "cm", thing.width_unit
     assert_nil thing.width
   end
 
-  test "update_attributes sets only the _unit column and converts it" do
+  test "update sets only the _unit column and converts it" do
     thing = Thing.create!
-    assert thing.update_attributes(width_unit: "inch")
+    assert thing.update(width_unit: "inch")
     assert_equal "in", thing.width_unit
     thing.reload
     assert_equal "in", thing.width_unit
   end
 
-  test "update_attributes sets the _unit column to something invalid" do
+  test "update sets the _unit column to something invalid" do
     thing = Thing.create!
-    assert thing.update_attributes(width_unit: :invalid)
+    assert thing.update(width_unit: :invalid)
     assert_equal "invalid", thing.width_unit
     thing.reload
     assert_equal "invalid", thing.width_unit
     assert_nil thing.width
   end
 
-  test "update_attributes does not set the _unit column to something invalid if there is validation" do
+  test "update does not set the _unit column to something invalid if there is validation" do
     thing = validated_thing
     thing.save!
-    refute thing.update_attributes(length_unit: :invalid)
+    refute thing.update(length_unit: :invalid)
   end
 
-  test "update_attributes sets one column then the other" do
+  test "update sets one column then the other" do
     thing = Thing.create!
-    assert thing.update_attributes(width_unit: "inch")
+    assert thing.update(width_unit: "inch")
     assert_nil thing.width
-    assert thing.update_attributes(width_value: "314")
+    assert thing.update(width_value: "314")
     assert_equal Measured::Length.new(314, :in), thing.width
   end
 
-  test "update_attributes sets both columns" do
+  test "update sets both columns" do
     thing = Thing.create!
-    assert thing.update_attributes(width_unit: :cm, width_value: 2)
+    assert thing.update(width_unit: :cm, width_value: 2)
     assert_equal Measured::Length.new(2, :cm), thing.width
     thing.reload
     assert_equal Measured::Length.new(2, :cm), thing.width
   end
 
-  test "update_attributes modifies the _value column" do
-    assert thing.update_attributes(height_value: 2)
+  test "update modifies the _value column" do
+    assert thing.update(height_value: 2)
     assert_equal Measured::Length.new(2, :m), thing.height
     thing.reload
     assert_equal Measured::Length.new(2, :m), thing.height
   end
 
-  test "update_attributes modifies only the _unit column" do
-    assert thing.update_attributes(height_unit: "foot")
+  test "update modifies only the _unit column" do
+    assert thing.update(height_unit: "foot")
     assert_equal Measured::Length.new(1, :ft), thing.height
     thing.reload
     assert_equal Measured::Length.new(1, :ft), thing.height
   end
 
-  test "update_attributes modifies the _unit column to be something invalid" do
-    assert thing.update_attributes(height_unit: :invalid)
+  test "update modifies the _unit column to be something invalid" do
+    assert thing.update(height_unit: :invalid)
     assert_nil thing.height
     assert_equal "invalid", thing.height_unit
     thing.reload
@@ -306,8 +284,8 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal "invalid", thing.height_unit
   end
 
-  test "update_attributes modifies both columns" do
-    assert thing.update_attributes(height_unit: "mm", height_value: 1.23)
+  test "update modifies both columns" do
+    assert thing.update(height_unit: "mm", height_value: 1.23)
     assert_equal Measured::Length.new(1.23, :mm), thing.height
     thing.reload
     assert_equal Measured::Length.new(1.23, :mm), thing.height
