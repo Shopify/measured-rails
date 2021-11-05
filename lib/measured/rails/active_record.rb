@@ -25,7 +25,11 @@ module Measured::Rails::ActiveRecord
           "#{ field }_unit"
         end
 
-        value_field_name = "#{ field }_value"
+        value_field_name = if options[:value_field_name]
+          measured_fields[field][:value_field_name] = options[:value_field_name].to_s
+        else
+          "#{ field }_value"
+        end
 
         # Reader to retrieve measured object
         define_method(field) do
