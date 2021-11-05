@@ -54,6 +54,16 @@ class ThingWithCustomUnitAccessor < ActiveRecord::Base
 end
 ```
 
+Similarly, you can optionally customize the model's value column by specifying it in the `value_field_name` option, as follows:
+
+```ruby
+class ThingWithCustomValueAccessor < ActiveRecord::Base
+  measured_length :length, value_field_name: :custom_length
+  measured_weight :total_weight, value_field_name: :custom_weight
+  measured_volume :volume, value_field_name: :custom_volume
+end
+```
+
 There are some simpler methods for predefined types:
 
 ```ruby
