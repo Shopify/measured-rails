@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161118203701) do
+ActiveRecord::Schema.define(version: 20211105120355) do
 
   create_table "thing_with_custom_unit_accessors", force: :cascade do |t|
     t.decimal  "length_value",                  precision: 10, scale: 2
@@ -78,6 +78,23 @@ ActiveRecord::Schema.define(version: 20161118203701) do
     t.string   "length_zero_scalar_unit",                         limit: 12
     t.decimal  "length_numericality_less_than_than_scalar_value",            precision: 10, scale: 2
     t.string   "length_numericality_less_than_than_scalar_unit",  limit: 12
+  end
+
+  create_table "thing_with_custom_value_accessors", force: :cascade do |t|
+    t.decimal  "custom_length",                  precision: 10, scale: 2
+    t.string   "length_unit",         limit: 12
+    t.decimal  "custom_width",                   precision: 10, scale: 2
+    t.string   "width_unit",          limit: 12
+    t.decimal  "custom_height",                  precision: 10, scale: 2
+    t.string   "height_unit",         limit: 12
+    t.decimal  "custom_volume",                  precision: 10, scale: 2
+    t.string   "volume_unit",         limit: 12
+    t.decimal  "custom_weight",                  precision: 10, scale: 2, default: "10.0"
+    t.string   "total_weight_unit",   limit: 12
+    t.decimal  "custom_extra_weight",            precision: 10, scale: 2
+    t.string   "extra_weight_unit",   limit: 12
+    t.datetime "created_at",                                                              null: false
+    t.datetime "updated_at",                                                              null: false
   end
 
 end
