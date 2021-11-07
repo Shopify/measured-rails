@@ -2,7 +2,7 @@
 class ThingWithCustomValueAccessor < ActiveRecord::Base
   measured_length :length, value_field_name: :custom_length
   validates :length, measured: true
-  measured_length :width, value_field_name: :custom_length
+  measured_length :width, value_field_name: :custom_width
   validates :width, measured: true
 
   measured_volume :volume, value_field_name: :custom_volume

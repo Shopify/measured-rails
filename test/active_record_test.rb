@@ -365,12 +365,12 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
   end
 
   test "using custom value fields works correctly" do
-    custom_value_thing.length = Measured::Length.new(4, :m)
-    custom_value_thing.width = Measured::Length.new(5, :m)
-    custom_value_thing.height = Measured::Length.new(6, :m)
-    custom_value_thing.volume = Measured::Volume.new(13, :l)
-    custom_value_thing.total_weight = Measured::Weight.new(14, :g)
-    custom_value_thing.extra_weight = Measured::Weight.new(15, :g)
+    assert_equal custom_value_thing.length, Measured::Length.new(4, :m)
+    assert_equal custom_value_thing.width, Measured::Length.new(5, :m)
+    assert_equal custom_value_thing.height, Measured::Length.new(6, :m)
+    assert_equal custom_value_thing.volume, Measured::Volume.new(13, :l)
+    assert_equal custom_value_thing.total_weight, Measured::Weight.new(14, :g)
+    assert_equal custom_value_thing.extra_weight, Measured::Weight.new(15, :g)
   end
 
   private
