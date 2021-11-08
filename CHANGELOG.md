@@ -1,3 +1,10 @@
+2.8.0
+-----
+
+* Support setting a custom value field. (Thanks @Steffylicious)
+* Drop support for Ruby 2.5
+* Use Ruby 3.0.2 for development
+
 2.7.1
 -----
 
