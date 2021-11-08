@@ -364,6 +364,15 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
     assert_equal custom_unit_thing.extra_weight, Measured::Weight.new(12, :kg)
   end
 
+  test "using custom value fields works correctly" do
+    assert_equal custom_value_thing.length, Measured::Length.new(4, :m)
+    assert_equal custom_value_thing.width, Measured::Length.new(5, :m)
+    assert_equal custom_value_thing.height, Measured::Length.new(6, :m)
+    assert_equal custom_value_thing.volume, Measured::Volume.new(13, :l)
+    assert_equal custom_value_thing.total_weight, Measured::Weight.new(14, :g)
+    assert_equal custom_value_thing.extra_weight, Measured::Weight.new(15, :g)
+  end
+
   private
 
   def length
@@ -408,6 +417,17 @@ class Measured::Rails::ActiveRecordTest < ActiveSupport::TestCase
       volume: Measured::Volume.new(9, :l),
       total_weight: Measured::Weight.new(10, :g),
       extra_weight: Measured::Weight.new(12, :g),
+    )
+  end
+
+  def custom_value_thing
+    @custom_value_thing ||= ThingWithCustomValueAccessor.new(
+      length: Measured::Length.new(4, :m),
+      width: Measured::Length.new(5, :m),
+      height: Measured::Length.new(6, :m),
+      volume: Measured::Volume.new(13, :l),
+      total_weight: Measured::Weight.new(14, :g),
+      extra_weight: Measured::Weight.new(15, :g),
     )
   end
 end
