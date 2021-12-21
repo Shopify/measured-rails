@@ -3,6 +3,11 @@ Unreleased
 
 
 
+2.8.2
+-----
+
+* Bump measured to 2.8.2
+
 2.8.1
 -----
 
