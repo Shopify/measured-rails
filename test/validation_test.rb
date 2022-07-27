@@ -205,6 +205,10 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
     assert_equal(custom_unit_thing.errors[:width], ["is not a valid unit"])
   end
 
+  test "validations work as expected on measured field with custom value accessor" do
+    assert custom_value_thing.valid?
+  end
+
   private
 
   def thing
@@ -224,6 +228,16 @@ class Measured::Rails::ValidationTest < ActiveSupport::TestCase
 
   def custom_unit_thing
     @custom_unit_thing ||= ThingWithCustomUnitAccessor.new(
+      length: Measured::Length.new(1, :m),
+      width: Measured::Length.new(2, :m),
+      height: Measured::Length.new(3, :m),
+      total_weight: Measured::Weight.new(10, :g),
+      extra_weight: Measured::Weight.new(12, :g),
+    )
+  end
+
+  def custom_value_thing
+    @custom_value_thing = ThingWithCustomValueAccessor.new(
       length: Measured::Length.new(1, :m),
       width: Measured::Length.new(2, :m),
       height: Measured::Length.new(3, :m),
