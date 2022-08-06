@@ -11,7 +11,7 @@ class MeasuredValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, measurable)
     measured_config = record.class.measured_fields[attribute]
     unit_field_name = measured_config[:unit_field_name] || "#{ attribute }_unit"
-    value_field_name = "#{ attribute }_value"
+    value_field_name = measured_config[:value_field_name] || "#{ attribute }_value"
 
     measured_class = measured_config[:class]
 
