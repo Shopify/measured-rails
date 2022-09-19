@@ -1,6 +1,7 @@
 Unreleased
 -----
 
+* Add Tapioca DSL compiler
 * Drop support for Ruby 2.6
 
 2.8.2
