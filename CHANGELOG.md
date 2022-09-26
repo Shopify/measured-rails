@@ -1,7 +1,7 @@
 Unreleased
 -----
 
-
+* Drop support for Ruby 2.6
 
 2.8.2
 -----
