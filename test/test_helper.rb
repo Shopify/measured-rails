@@ -6,6 +6,9 @@ require "minitest/autorun"
 require "minitest/reporters"
 require "mocha/minitest"
 
+# Disable Ruby VERBOSE mode to prevent sorbet-runtime from printing redefined warnings.
+$VERBOSE = false
+
 ActiveSupport.test_order = :random
 
 # Prevent two reporters from printing
