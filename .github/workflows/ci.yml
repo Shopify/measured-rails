@@ -16,16 +16,10 @@ jobs:
           - '3.2'
         gemfile:
           - Gemfile
-          - gemfiles/rails-5.2.gemfile
           - gemfiles/rails-6.0.gemfile
           - gemfiles/rails-6.1.gemfile
           - gemfiles/rails-7.0.gemfile
           - gemfiles/rails-edge.gemfile
-        exclude:
-          - ruby: '3.0'
-            gemfile: gemfiles/rails-5.2.gemfile
-          - ruby: '3.1'
-            gemfile: gemfiles/rails-5.2.gemfile
     name: Ruby ${{ matrix.ruby }} ${{ matrix.gemfile }}
     steps:
       - uses: actions/checkout@v1
