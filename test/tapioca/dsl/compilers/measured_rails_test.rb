@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "sorbet-runtime"
+require "tapioca/internal"
 require "tapioca/helpers/test/dsl_compiler"
 require "tapioca/dsl/compilers/measured_rails"
 
@@ -16,7 +16,7 @@ module Tapioca
           use_dsl_compiler(Tapioca::Dsl::Compilers::MeasuredRails)
         end
 
-        test "#initilize gathers only ActiveRecord subclasses" do
+        test "#initialize gathers only ActiveRecord subclasses" do
           add_ruby_file("content.rb", <<~RUBY)
             class Post < ActiveRecord::Base
             end

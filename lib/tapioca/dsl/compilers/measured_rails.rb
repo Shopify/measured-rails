@@ -1,11 +1,7 @@
 # typed: strict
 # frozen_string_literal: true
 
-begin
-  require "tapioca/dsl"
-rescue LoadError
-  return
-end
+return unless defined?(::Measured::Rails::ActiveRecord)
 
 module Tapioca
   module Dsl
