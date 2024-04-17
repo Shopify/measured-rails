@@ -1,11 +1,7 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'measured/rails/version'
-
 Gem::Specification.new do |spec|
   spec.name          = "measured-rails"
-  spec.version       = Measured::Rails::VERSION
+  spec.version       = "3.0.0"
   spec.authors       = ["Kevin McPhillips"]
   spec.email         = ["gems@shopify.com"]
   spec.summary       = %q{Rails adaptor for measured}
@@ -26,19 +22,11 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "measured", Measured::Rails::VERSION
-
-  spec.add_runtime_dependency "railties", ">= 5.2"
-  spec.add_runtime_dependency "activemodel", ">= 5.2"
-  spec.add_runtime_dependency "activerecord", ">= 5.2"
-
-  spec.add_development_dependency "rake", "> 10.0"
-  spec.add_development_dependency "minitest", "> 5.5.1"
-  spec.add_development_dependency "minitest-reporters"
-  spec.add_development_dependency "mocha", ">= 1.4.0"
-  spec.add_development_dependency "pry"
-  spec.add_development_dependency "sqlite3"
-  spec.add_development_dependency "tapioca"
+  spec.post_install_message = <<~MSG
+    Since version 3.0.0, the functionality of the `measured-rails` gem has been
+    merged into the `measured` gem. This gem will no longer be maintained. Please
+    remove the gem from your `Gemfile` and replace it with just the `measured` gem.
+  MSG
 
   spec.required_ruby_version = ">= 2.7"
 end
