@@ -1,8 +1,7 @@
-Unreleased
+3.0.0
 -----
 
-* Add Tapioca DSL compiler
-* Drop support for Ruby 2.6
+* This gem is now deprecated. The functionality of this gem has been merged into the [measured](https://github.com/Shopify/measured).
 
 2.8.2
 -----
